@@ -1,0 +1,75 @@
+<div class="container" *ngIf="selectedHome; else teamPage">
+  <div class="header">
+    <app-header></app-header>
+    <app-search-bar (eventValue)="searchValue($event)"></app-search-bar>
+  </div>
+  <div class="filter">
+    <div class="filter-heading">
+      <span>FILTERS</span>
+    </div>
+    <div class="filters-checkbox" *ngFor="let data of filteredValue">
+      <span>{{ data.label | uppercase }}</span>
+      <form>
+        <ng-container *ngFor="let item of data.items">
+          <input
+            type="checkbox"
+            id="{{ item.label }}"
+            name="{{ item.label }}"
+            value="{{ item.value }}"
+            (change)="filterData($event, data.label)"
+          />
+          <label for="{{ item.label }}">{{ item.label }}</label
+          ><br />
+        </ng-container>
+      </form>
+    </div>
+  </div>
+
+  <div class="card-user">
+    <app-card
+      *ngFor="let data of paginatedData | search : searchTerm"
+      [data]="data"
+      (onClickid)="onClick($event)"
+    ></app-card>
+  </div>
+
+  <div class="pagination-container">
+    <p-paginator
+      [rows]="rows"
+      [first]="first"
+      [totalRecords]="userData.length"
+      [rowsPerPageOptions]="[20, 40, 60]"
+      (onPageChange)="onPageChange($event)"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="{first} - {last} of {totalRecords}"
+    ></p-paginator>
+  </div>
+  <div class="btn">
+    <app-button customLabel="Submit" (buttonClick)="onSubmit()"></app-button>
+  </div>
+</div>
+
+<ng-template #teamPage>
+  <div class="selected-user-container">
+    <div class="inner-container">
+      <p-card header="Welcome to your selected team Captain!">
+        <div class="p-card-div">
+          <ng-container *ngIf="selectedUser.length === 0">
+            <h3>No teammates selected</h3>
+          </ng-container>
+          <ng-container *ngIf="selectedUser.length != 0">
+
+            <div *ngFor="let data of selectedUser; let i = index">
+              <h3>{{ data.id }} - {{ data.first_name }} {{ data.last_name }}</h3>
+              <span> {{ data.domain }}</span>
+            </div>
+          </ng-container>
+        </div>
+      </p-card>
+    </div>
+    <div class="btn">
+
+      <app-button customLabel="Back" (buttonClick)="backClick()"></app-button>
+    </div>
+  </div>
+</ng-template>

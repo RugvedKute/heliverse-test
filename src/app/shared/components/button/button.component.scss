@@ -1,0 +1,18 @@
+:host::ng-deep {
+
+  .p-element {
+    padding: 1.2rem;
+  }
+
+}
+
+@media screen and (max-width: 600px) {
+
+  :host::ng-deep {
+    .p-element {
+      font-size: 0.9rem;
+      padding: 0.9rem;
+    }
+  }
+
+}

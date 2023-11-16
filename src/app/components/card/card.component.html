@@ -1,0 +1,32 @@
+<p-card (click)="onClick(data.id)">
+  <div [ngClass]="data.selected === true && data.available === true? 'p-card-body-selected': 'p-card-body' ">
+    <div class="user-avatar">
+      <img src="{{ data.avatar }}" />
+    </div>
+    <div class="user-info">
+      <div class="user-name-domain">
+        <h3>{{ data.first_name }} {{ data.last_name }}</h3>
+        <span>{{ data.domain }}</span>
+      </div>
+      <div class="user-other-details">
+        <div class="details">
+          <img src="../../../assets/images/icons8-email-50.png" />
+          <span>{{ data.email }}</span>
+        </div>
+        <div class="details">
+          <img src="../../../assets/images/icons8-gender-50.png" />
+          <span>{{ data.gender }}</span>
+        </div>
+        <div class="details">
+          <ng-container *ngIf="data.available === true">
+            <img src="../../../assets/images/icons8-green-circle-48.png" />
+          </ng-container>
+          <ng-container *ngIf="data.available !== true">
+            <img src="../../../assets/images/icons8-red-circle-48.png" />
+          </ng-container>
+          <span>{{ data.available }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-card>

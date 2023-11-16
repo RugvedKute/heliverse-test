@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700&family=Montserrat&family=Open+Sans:wght@500&family=Poppins&family=Press+Start+2P&family=Vina+Sans&display=swap');
+
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: 'Montserrat';
+}
