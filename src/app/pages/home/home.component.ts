@@ -16,20 +16,31 @@ export class HomeComponent implements OnInit {
   searchTerm = '';
   paginatedData: any;
   filteredValue!: any[];
-
   domain: any[] = [];
   gender: any[] = [];
   available: any[] = [];
   id: any;
   selectedUser: any[] = [];
   selectedHome = true;
+  mainUserData: any;
+  selectedUserDomain = [
+    { domain: 'Sales', value: false },
+    { domain: 'Finance', value: false },
+    { domain: 'Marketing', value: false },
+    { domain: 'IT', value: false },
+    { domain: 'Management', value: false },
+    { domain: 'UI Designing', value: false },
+    { domain: 'Business Development', value: false },
+  ];
 
   ngOnInit(): void {
-    this.userData = Object.values(this.list).map((data: any) => ({
+    this.mainUserData = Object.values(this.list).map((data: any) => ({
       ...data,
       selected: false,
     }));
-  
+
+    this.userData = this.mainUserData;
+
     this.paginatedData = this.userData.slice(
       this.first,
       this.first + this.rows
@@ -73,6 +84,24 @@ export class HomeComponent implements OnInit {
 
   searchValue(event: any) {
     this.searchTerm = event;
+    this.userData = this.mainUserData
+      .filter((item: any) => {
+        if (item.first_name || item.last_name) {
+          const fullName = (
+            item.first_name +
+            ' ' +
+            item.last_name
+          ).toLowerCase();
+          return fullName.includes(event.toLowerCase());
+        }
+
+        return false;
+      });
+
+    this.paginatedData = this.userData.slice(
+      this.first,
+      this.first + this.rows
+    );
   }
 
   filterData(event: any, label: string) {
@@ -105,16 +134,14 @@ export class HomeComponent implements OnInit {
       this.gender.length === 0 &&
       this.available.length === 0
     ) {
-      this.userData = Object.values(this.list).map((data: any) => ({
-        ...data,
-        selected: false,
-      }));
+      this.userData = this.mainUserData;
+      this.paginatedData = this.userData.slice(
+        this.first,
+        this.first + this.rows
+      );
+
     } else {
-      this.userData = Object.values(this.list)
-        .map((data: any) => ({
-          ...data,
-          selected: false,
-        }))
+      this.userData = this.mainUserData
         .filter((item: any) => {
           const domainCondition =
             this.domain.length === 0 ||
@@ -134,10 +161,6 @@ export class HomeComponent implements OnInit {
         this.first + this.rows
       );
     }
-
-    console.log(this.domain);
-    console.log(this.gender);
-    console.log(this.available);
   }
 
   onPageChange(event: any) {
@@ -151,32 +174,40 @@ export class HomeComponent implements OnInit {
   onClick(event: any) {
     const index = this.userData.findIndex((data: any) => data.id === event);
 
+    const indexDomain = this.selectedUserDomain.findIndex((data: any) => {
+      return this.userData[index].domain == data.domain;
+    });
+
     if (index !== -1) {
-      if (this.userData[index].available && !this.userData[index].selected) {
+      if (
+        this.userData[index].available &&
+        !this.userData[index].selected &&
+        this.selectedUserDomain[indexDomain].value == false
+      ) {
         this.userData[index].selected = true;
         this.selectedUser.push(this.userData[index]);
+        this.selectedUserDomain[indexDomain].value = true;
       } else {
         this.userData[index].selected = false;
         const indexInSelected = this.selectedUser.findIndex(
           (data: any) => data.id === event
         );
         if (indexInSelected !== -1) {
+          this.selectedUserDomain[indexDomain].value = false;
           this.selectedUser.splice(indexInSelected, 1);
         }
       }
 
-      console.log(this.selectedUser);
     } else {
       console.error(`User with id ${event} not found in userData.`);
     }
   }
 
   backClick() {
-    this.selectedHome =! this.selectedHome;
+    this.selectedHome = !this.selectedHome;
   }
 
   onSubmit() {
-    console.log('button clicked');
     this.selectedHome = !this.selectedHome;
   }
 }

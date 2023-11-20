@@ -27,7 +27,7 @@
 
   <div class="card-user">
     <app-card
-      *ngFor="let data of paginatedData | search : searchTerm"
+      *ngFor="let data of paginatedData"
       [data]="data"
       (onClickid)="onClick($event)"
     ></app-card>
